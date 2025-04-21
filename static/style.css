@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  
+  body {
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  .container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 0;
+  }
+  
+  .logo-container {
+    font-size: 1.0rem;
+    display: flex;
+    align-items: center;
+    gap: 1.7rem;
+  }
+  
+  .logo-img {
+    height: 35px;
+    width: auto;
+    object-fit: contain;
+  }  
+  
+  .auth-buttons button {
+    margin-left: 0.5rem;
+  }
+  
+  .btn-outline {
+    border: 1px solid #ccc;
+    background: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  .btn-solid {
+    border: none;
+    border-radius: 8px;
+    background: #a8e6a2;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .main {
+    text-align: center;
+    padding: 4rem 1rem;
+  }
+  
+  .main-title {
+    color: #7ee787;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .subheading {
+    max-width: 600px;
+    margin: auto;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .login-box {
+    background: white;
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 1.0rem;
+  }
+  
+  .user {
+    text-align: left;
+  }
+
+  .contra {
+    text-align: left;
+  }
+
+  .login-box input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .full-width {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .forgot-link {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    color: #007bff;
+  }
+  
+  .footer {
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 2rem 0;
+  }
+  
+  .footer-left h3 {
+    margin-bottom: 1rem;
+  }
+  
+  .social-icons span {
+    margin-right: 0.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .column h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .column p {
+    margin: 0.25rem 0;
+    color: #555;
+  }  

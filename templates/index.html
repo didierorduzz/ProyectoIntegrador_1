@@ -1,33 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestamos audiovisuales</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Prestamo de audiovisuales</title>
+  <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <header class="header">
-        
-        <div class="head">
-            <a href="#">
-                <img src="imagenes/udi logo (nombre).png" class="Udi-logo" alt="">
-            </a>
-            <nav class="nav-bar">
-                <ul>
-                    <li><a href="#">Iniciar sesion</a></li>
-                    <li><a href="#">Registrarse</a></li>                
-                </ul>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo-container">
+        <a href="https://web.udi.edu.co/">
+        <img src="../imagenes/udi logo (nombre).png"  alt="Logo" class="logo-img">
+        </a>
+        <h1 class="site-name">Site name</h1>
+      </div>      
+      <div class="xauth-buttons">
+        <button class="btn-solid">Registrarse</button>
+      </div>
+    </div>
+  </header>
 
-            </nav>
-            <h1>Prestamo de audiovisuales y salas de computo</h1>
-            <h2>¡Bienvenido!</h2>
-            <p>Por favor ingrese sus datos:</p>
+  <!-- Main Content -->
+  <main class="main">
+    <h2 class="main-title">Pantalla de inicio</h2>
+    <p class="subheading">Subheading that sets up context, shares more info about the website, or generally gets people psyched to keep scrolling.</p>
+
+    <div class="login-box">
+      <label class="user">Usuario</label>
+      <input type="email" placeholder="Correo electrónico">
+      
+      <label class="contra">Contraseña</label>
+      <input type="password" placeholder="Ingresa tu contraseña">
+
+      <button class="btn-solid full-width">Iniciar sesión</button>
+
+      <a href="#" class="forgot-link">Recuperar contraseña</a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-left">
+        <h3>Site name</h3>
+        <div class="social-icons">
+          <span>📘</span>
+          <span>📷</span>
+          <span>🎥</span>
         </div>
-
-    </header>
-
-
-
+      </div>
+      <div class="footer-links">
+        <div class="column">
+          <h4>Topic</h4>
+          <p>Page</p>
+          <p>Page</p>
+          <p>Page</p>
+        </div>
+        <div class="column">
+          <h4>Topic</h4>
+          <p>Page</p>
+          <p>Page</p>
+          <p>Page</p>
+        </div>
+        <div class="column">
+          <h4>Topic</h4>
+          <p>Page</p>
+          <p>Page</p>
+          <p>Page</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
