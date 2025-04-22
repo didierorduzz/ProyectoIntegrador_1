@@ -66,20 +66,6 @@
       backdrop-filter: blur(10px);
     }
 
-    .user {
-      display: block;
-      text-align: left;
-      margin-bottom: -2px;
-      font-weight: 500;
-    }
-
-    .contra {
-      display: block;
-      text-align: left;
-      margin-bottom: -2px;
-      font-weight: 500;
-    }
-
     .form-container input {
       width: 95%;
       padding: 10px;

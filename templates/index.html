@@ -12,7 +12,7 @@
 
   <header>
         <a href="https://web.udi.edu.co/">
-        <img src="../imagenes/udi-logo.png" alt="Logo" class="logo-img">
+          <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo" class="logo-img">
         </a>
     <div class="auth-buttons">
       <button class="register">Registrarse</button>
@@ -25,9 +25,7 @@
 
     <div class="form-container">
       <form method="post" action="/login">
-        <label class="user">Usuario</label>
         <input type="text" placeholder="Correo electrónico" name="email" required>
-        <label class="contra">Contraseña</label>
         <input type="password" placeholder="Ingresa tu contraseña" name="password" required>
         <button type="submit">Iniciar sesión</button>
         <a href="#">Recuperar contraseña</a>
