@@ -1,0 +1,226 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+  color: white;
+}
+
+.admin-container {
+  display: flex;
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar {
+  width: 230px;
+  background-color: #111827;
+  padding: 2rem 1rem;
+  transition: width 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.closed {
+  width: 45px;
+  padding: 2rem 0.9rem;
+}
+
+.sidebar.closed .menu a span,
+.sidebar.closed .logout-btn span,
+.sidebar.closed .logo-img {
+  display: none;
+}
+
+.sidebar .menu a,
+.sidebar .logout-btn,
+.sidebar .logo-img {
+  transition: all 0.3s ease;
+}
+
+.logo-img {
+  width: 90px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  margin-bottom: 20px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  transition: background 0.3s;
+}
+
+.menu a:hover,
+.menu a.active {
+  background-color: #0fffc1;
+  color: #111827;
+}
+
+.logout-btn {
+  margin-top: auto;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-decoration: none;
+  background-color: #b91c1c;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1f2937;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0fffc1;
+}
+
+/* Botón hamburguesa */
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.actions i {
+  margin-left: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Search */
+.input-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.input-container input {
+  width: 97.5%;
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 23px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #aaa;
+  display: none;
+}
+
+.input-container input:not(:placeholder-shown) + .clear-btn {
+  display: inline;
+}
+
+/* Loan list */
+.loan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.loan-item {
+  display: flex;
+  align-items: center;
+  background-color: #1f2937;
+  padding: 1rem;
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.loan-item:hover {
+  background-color: #374151;
+}
+
+.loan-item .icon {
+  background-color: #0fffc1;
+  color: #111827;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.loan-item .info {
+  flex-grow: 1;
+}
+
+.loan-item .status {
+  color: #0fffc1;
+  font-weight: bold;
+}
+
+/* Flash messages */
+.flash-messages {
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.alert {
+  padding: 12px 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.alert.success {
+  background-color: #00c853;
+  color: white;
+  border-left: 5px solid #00e676;
+}
+
+.alert.error {
+  background-color: #d50000;
+  color: white;
+  border-left: 5px solid #ff1744;
+}

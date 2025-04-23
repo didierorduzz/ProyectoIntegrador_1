@@ -47,6 +47,29 @@
       margin-top: 30px;
     }
 
+    .flash-messages {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .alert {
+      padding: 12px 20px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .alert.success {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .alert.error {
+      background-color: #f44336;
+      color: white;
+    }    
+
     h1 {
       font-size: 40px;
       color: #00ffaa;
@@ -108,10 +131,6 @@
       margin: 0 14px;
       font-size: 25px;
       transition: transform 0.3s, color 0.3s;
-    }
-
-    .social-icons i {
-      color: white;
     }
 
     .social-icons a:hover {

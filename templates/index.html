@@ -23,10 +23,20 @@
     <h1>Prestamo de audiovisuales y salas de computo</h1>
     <h4 class="main-text">Ingresa tus datos:</h4>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}  
+
     <div class="form-container">
       <form method="post" action="/login">
-        <input type="text" placeholder="Correo electrónico" name="email" required>
-        <input type="password" placeholder="Ingresa tu contraseña" name="password" required>
+        <input type="text" placeholder="Correo electrónico" name="usuario" required>
+        <input type="password" placeholder="Ingresa tu contraseña" name="contrasena" required>
         <button type="submit">Iniciar sesión</button>
         <a href="#">Recuperar contraseña</a>
       </form>
@@ -42,6 +52,15 @@
       <a href="#"><i class="fab fa-youtube"></i></a>
     </div>
   </footer>
-
+  <script>
+    setTimeout(() => {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(alert => {
+        alert.style.transition = 'opacity 0.5s ease';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      });
+    }, 4000); // 4 segundos
+  </script>  
 </body>
 </html>

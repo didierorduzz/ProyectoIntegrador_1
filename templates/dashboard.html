@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de administrador</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='panel.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/dashboard.css">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar" id="sidebar">
+      <a href="https://web.udi.edu.co/">
+        <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo" class="logo-img">
+      </a>
+      <nav class="menu">
+        <a href="#" class="active"><i class="fas fa-box"></i> <span>Préstamos</span></a>
+        <a href="#"><i class="fas fa-users"></i> <span>Usuarios</span></a>
+        <a href="#"><i class="fas fa-chart-bar"></i> <span>Reportes</span></a>
+        <a href="#"><i class="fas fa-cog"></i> <span>Configuración</span></a>
+        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Cerrar sesión</span></a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <header class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>    
+        <h1>Panel de administrador</h1>
+        <div class="actions">
+          <i class="fas fa-bell"></i>
+          <i class="fas fa-user-circle"></i>
+        </div>
+      </header>
+
+      <div class="input-container">
+        <input type="text" id="miInput" placeholder="Buscar por usuario, fecha o estado del préstamo">
+        <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
+      </div>
+
+      <section class="loan-list">
+        {% for i in range(5) %}
+        <div class="loan-item">
+          <div class="icon"><i class="fas fa-user"></i></div>
+          <div class="info">
+            <strong>Usuario {{ i + 1 }}</strong>
+            <p>Resumen del préstamo. Lorem ipsum dolor sit amet.</p>
+          </div>
+          <div class="status">100+</div>
+        </div>
+        {% endfor %}
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Ocultar alertas después de 4 segundos
+    setTimeout(() => {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(alert => {
+        alert.style.transition = 'opacity 0.5s ease';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      });
+    }, 4000);
+
+    // Toggle sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('closed');
+    }
+  </script>
+</body>
+</html>
