@@ -54,7 +54,7 @@ body {
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 10px;
   transition: background 0.3s;
 }

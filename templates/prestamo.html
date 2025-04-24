@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solicitud de Préstamo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='panel.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/prestamo.css">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar collapsed" id="sidebar">
+      <a href="https://web.udi.edu.co/">
+        <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo" class="logo-img">
+      </a>
+      <nav class="menu">
+        <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> <span>Inicio</span></a>
+        <a href="#" class="active"><i class="fas fa-file-alt"></i> <span>Solicitud</span></a>
+        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Salir</span></a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="hamburger" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>    
+        <h1>Solicitud de Préstamo</h1>
+        <div class="actions">
+          <i class="fas fa-bell"></i>
+          <i class="fas fa-user-circle"></i>
+        </div>
+      </header>
+
+      <section class="form-section">
+        <h2 class="form-title">Solicitud de Préstamo</h2>
+        <p class="form-subtitle">Completa la información para solicitar un préstamo de sala</p>
+
+        <form action="/solicitar" method="post" class="prestamo-form">
+          <label for="sala"><i class="fas fa-door-open"></i> Sala disponible</label>
+          <select name="sala" id="sala">
+            <option value="">Seleccione una sala</option>
+            <option value="1">Sala A</option>
+            <option value="2">Sala B</option>
+          </select>
+
+          <label for="hora"><i class="fas fa-clock"></i> Hora de reserva</label>
+          <input type="time" name="hora" id="hora">
+
+          <label for="fecha"><i class="fas fa-calendar-alt"></i> Fecha de reserva</label>
+          <input type="date" name="fecha" id="fecha">
+
+          <label for="observaciones"><i class="fas fa-comment"></i> Observaciones</label>
+          <textarea name="observaciones" id="observaciones" rows="4" placeholder="Observaciones o especificaciones"></textarea>
+
+          <button type="submit" class="submit-btn">Solicitar préstamo</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('collapsed');
+    }
+  </script>
+</body>
+</html>

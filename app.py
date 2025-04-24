@@ -1,7 +1,19 @@
+import oracledb
+import config
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta'  # Necesaria para flash y sesión
+
+oracledb.init_oracle_client(lib_dir=r"C:\oracle\instantclient_19_26")
+
+conn = oracledb.connect(
+    user="didierorduzz",
+    password="Didierorduz1",
+    dsn="localhost/XE"
+)
+
+print("Conectado a Oracle:", conn.version)
 
 @app.route('/')
 def inicio():
