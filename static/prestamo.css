@@ -55,3 +55,12 @@
   .prestamo-form .submit-btn:hover {
     background-color: #61db95;
   }  
+
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid #7ef0ad;
+    background-color: #2f2f4a;
+  }
+  
+  select:invalid {
+    color: #aaa;
+  }  

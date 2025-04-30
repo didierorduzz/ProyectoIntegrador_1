@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prestamo de audiovisuales</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/style.css">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Préstamo de Audiovisuales</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>  
 <body>
 
   <header>
-        <a href="https://web.udi.edu.co/">
-          <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo" class="logo-img">
-        </a>
+    <a href="https://web.udi.edu.co/">
+      <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo UDI" class="logo-img">
+    </a>
     <div class="auth-buttons">
-      <button class="register">Registrarse</button>
+      <a href="{{ url_for('registro') }}"><button class="register">Registrarse</button></a>
     </div>
   </header>
 
   <div class="main-content">
-    <h1>Prestamo de audiovisuales y salas de computo</h1>
-    <h4 class="main-text">Ingresa tus datos:</h4>
+    <h1>Préstamo de Audiovisuales y Salas de Cómputo</h1>
+    <h4 class="main-text">Ingresa tus datos para iniciar sesión:</h4>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -31,20 +32,24 @@
         {% endfor %}
       </div>
     {% endif %}
-  {% endwith %}  
+    {% endwith %}
 
     <div class="form-container">
-      <form method="post" action="/login">
-        <input type="text" placeholder="Correo electrónico" name="usuario" required>
-        <input type="password" placeholder="Ingresa tu contraseña" name="contrasena" required>
+      <form method="post" action="{{ url_for('login') }}">
+        <label for="usuario">Correo electrónico</label>
+        <input type="text" placeholder="Correo electrónico" name="usuario" id="usuario" required>
+
+        <label for="contrasena">Contraseña</label>
+        <input type="password" placeholder="Ingresa tu contraseña" name="contrasena" id="contrasena" required>
+
         <button type="submit">Iniciar sesión</button>
-        <a href="#">Recuperar contraseña</a>
+        <a href="#">¿Olvidaste tu contraseña?</a>
       </form>
     </div>
   </div>
 
   <footer>
-    <div class="logo">Site name</div>
+    <div class="logo">UDI</div>
     <div class="social-icons">
       <a href="#"><i class="fab fa-facebook-f"></i></a>
       <a href="#"><i class="fab fa-instagram"></i></a>
@@ -52,6 +57,7 @@
       <a href="#"><i class="fab fa-youtube"></i></a>
     </div>
   </footer>
+
   <script>
     setTimeout(() => {
       const alerts = document.querySelectorAll('.alert');
@@ -60,7 +66,7 @@
         alert.style.opacity = '0';
         setTimeout(() => alert.remove(), 500);
       });
-    }, 4000); // 4 segundos
-  </script>  
+    }, 4000);
+  </script>
 </body>
 </html>

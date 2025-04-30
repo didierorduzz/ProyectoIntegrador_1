@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuarios Registrados</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='panel.css') }}">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar">
+      <a href="{{ url_for('dashboard') }}"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a>
+    </aside>
+
+    <main class="main-content">
+      <h1>Lista de Usuarios Registrados</h1>
+      <table style="width:100%; color:white; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th style="border-bottom: 1px solid #ccc; text-align: left;">Nombre</th>
+            <th style="border-bottom: 1px solid #ccc; text-align: left;">Correo</th>
+            <th style="border-bottom: 1px solid #ccc; text-align: left;">Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for nombre, correo, rol in usuarios %}
+          <tr>
+            <td>{{ nombre }}</td>
+            <td>{{ correo }}</td>
+            <td>{{ rol }}</td>
+          </tr>
+          {% endfor %}
+          {% if usuarios|length == 0 %}
+            <tr><td colspan="3">No hay usuarios registrados.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

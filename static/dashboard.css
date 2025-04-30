@@ -12,6 +12,7 @@ body {
 
 .sidebar {
   width: 230px;
+  height: 100vh;
   background-color: #111827;
   padding: 2rem 1rem;
   transition: width 0.3s ease, padding 0.3s ease;
@@ -63,6 +64,14 @@ body {
 .menu a.active {
   background-color: #0fffc1;
   color: #111827;
+}
+
+.menu-link.active {
+  background-color: rgba(0, 242, 255, 0.2);
+  border-left: 4px solid #00f2ff;
+  color: #00f2ff;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00f2ff;
 }
 
 .logout-btn {

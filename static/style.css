@@ -5,6 +5,16 @@
       color: white;
     }
 
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo {
+      height: 40px; /* ajusta el tamaño como quieras */
+    }    
+
     header {
       display: flex;
       justify-content: space-between;

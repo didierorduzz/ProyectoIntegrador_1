@@ -1,44 +1,168 @@
-import oracledb
-import config
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from datetime import datetime
+from db import get_connection
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta'  # Necesaria para flash y sesión
-
-oracledb.init_oracle_client(lib_dir=r"C:\oracle\instantclient_19_26")
-
-conn = oracledb.connect(
-    user="didierorduzz",
-    password="Didierorduz1",
-    dsn="localhost/XE"
-)
-
-print("Conectado a Oracle:", conn.version)
+app.secret_key = 'clave_secreta'
 
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        correo = request.form.get('correo')
+        contrasena = request.form.get('contrasena')
+        confirmar = request.form.get('confirmar')
+        rol = request.form.get('rol')
+
+        if contrasena != confirmar:
+            flash('Las contraseñas no coinciden.', 'error')
+            return redirect(url_for('registro'))
+
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT INTO usuarios (nombre, correo, contrasena, rol)
+                    VALUES (:1, :2, :3, :4)
+                """, (nombre, correo, contrasena, rol))
+                conn.commit()
+                flash('Usuario registrado exitosamente. Ahora puedes iniciar sesión.', 'success')
+                return redirect(url_for('inicio'))
+        except Exception as e:
+            print("Error al registrar usuario:", e)
+            flash('Error al registrar el usuario.', 'error')
+            return redirect(url_for('registro'))
+    else:
+        return render_template('register.html')
+
+
 @app.route('/login', methods=['POST'])
 def login():
     usuario = request.form['usuario']
     contrasena = request.form['contrasena']
-    
-    if usuario == 'admin' and contrasena == '1234':
-        session['usuario'] = usuario
-        flash('Inicio de sesión exitoso.', 'success')
-        return redirect(url_for('dashboard'))
-    else:
-        flash('Credenciales incorrectas. Inténtalo de nuevo.', 'error')
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT rol FROM usuarios WHERE correo = :1 AND contrasena = :2", (usuario, contrasena))
+            result = cursor.fetchone()
+
+            if result:
+                session['usuario'] = usuario
+                rol = result[0]
+                flash('Inicio de sesión exitoso.', 'success')
+                if rol == 'administrador':
+                    return redirect(url_for('dashboard'))
+                else:
+                    return redirect(url_for('solicitar_prestamo'))
+            else:
+                flash('Credenciales incorrectas.', 'error')
+                return redirect(url_for('inicio'))
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        flash('Error en el inicio de sesión.', 'error')
         return redirect(url_for('inicio'))
 
 @app.route('/dashboard')
 def dashboard():
-    if 'usuario' in session:
-        return render_template('dashboard.html')
-    else:
+    if 'usuario' not in session:
         flash('Debes iniciar sesión primero.', 'error')
         return redirect(url_for('inicio'))
+
+    vista = request.args.get('vista', 'prestamos')
+
+    datos = []
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            if vista == 'prestamos':
+                cursor.execute("""
+                    SELECT sala, TO_CHAR(hora_reserva, 'HH24:MI'), 
+                           TO_CHAR(fecha_reserva, 'YYYY-MM-DD'), observaciones
+                    FROM prestamos
+                    ORDER BY fecha_reserva DESC, hora_reserva DESC
+                """)
+                datos = cursor.fetchall()
+            elif vista == 'usuarios':
+                cursor.execute("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre")
+                datos = cursor.fetchall()
+    except Exception as e:
+        print("Error en dashboard:", e)
+        flash("No se pudieron cargar los datos.", "error")
+
+    return render_template('dashboard.html', vista=vista, datos=datos)
+
+@app.route('/prestamo')
+def solicitar_prestamo():
+    if 'usuario' not in session:
+        flash('Debes iniciar sesión primero.', 'error')
+        return redirect(url_for('inicio'))
+    return render_template('prestamo.html')
+
+@app.route('/solicitar', methods=['POST'])
+def solicitar():
+    sala = request.form.get('sala')
+    hora = request.form.get('hora')
+    fecha = request.form.get('fecha')
+    observaciones = request.form.get('observaciones')
+
+    if not sala or not hora or not fecha:
+        flash("Todos los campos son obligatorios.", "error")
+        return redirect(url_for('solicitar_prestamo'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Verifica si ya existe una reserva para esa fecha, hora y sala
+            cursor.execute("""
+                SELECT COUNT(*) FROM prestamos
+                WHERE sala = :1 AND hora_reserva = :2 AND fecha_reserva = TO_DATE(:3, 'YYYY-MM-DD')
+            """, (sala, hora, fecha))
+            count = cursor.fetchone()[0]
+
+            if count > 0:
+                flash("La sala ya está reservada para esa fecha y hora.", "error")
+                return redirect(url_for('solicitar_prestamo'))
+
+            # Inserta nueva solicitud
+            cursor.execute("SELECT id_usuario FROM usuarios WHERE correo = :1", (session['usuario'],))
+            usuario_id = cursor.fetchone()[0]
+
+            cursor.execute("""
+            INSERT INTO prestamos (sala, hora_reserva, fecha_reserva, observaciones, id_usuario)
+            VALUES (:1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5)
+            """, (sala, hora, fecha, observaciones, usuario_id))
+            conn.commit()
+            flash("Solicitud registrada exitosamente.", "success")
+    except Exception as e:
+        print("Error al guardar en Oracle:", e)
+        flash("Hubo un error al registrar la solicitud.", "error")
+
+    return redirect(url_for('dashboard'))
+
+@app.route('/usuarios')
+def ver_usuarios():
+    if 'usuario' not in session:
+        flash('Inicia sesión primero.', 'error')
+        return redirect(url_for('inicio'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre")
+            usuarios = cursor.fetchall()
+    except Exception as e:
+        print("Error al cargar usuarios:", e)
+        usuarios = []
+        flash('Error al mostrar usuarios.', 'error')
+
+    return render_template('usuarios.html', usuarios=usuarios)
 
 @app.route('/logout')
 def logout():

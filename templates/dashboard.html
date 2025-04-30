@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panel de administrador</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='panel.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../static/dashboard.css">
@@ -15,13 +16,28 @@
       <a href="https://web.udi.edu.co/">
         <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo" class="logo-img">
       </a>
+
       <nav class="menu">
-        <a href="#" class="active"><i class="fas fa-box"></i> <span>Préstamos</span></a>
-        <a href="#"><i class="fas fa-users"></i> <span>Usuarios</span></a>
-        <a href="#"><i class="fas fa-chart-bar"></i> <span>Reportes</span></a>
-        <a href="#"><i class="fas fa-cog"></i> <span>Configuración</span></a>
-        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Cerrar sesión</span></a>
-      </nav>
+        <a href="{{ url_for('dashboard', vista='prestamos') }}" class="menu-link {% if vista == 'prestamos' %}active{% endif %}">
+          <i class="fas fa-box"></i> <span>Préstamos</span>
+        </a>
+        
+        <a href="{{ url_for('dashboard', vista='usuarios') }}" class="menu-link {% if vista == 'usuarios' %}active{% endif %}">
+          <i class="fas fa-users"></i> <span>Usuarios</span>
+        </a>        
+      
+        <a href="#" class="menu-link">
+          <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+        </a>
+      
+        <a href="#" class="menu-link">
+          <i class="fas fa-cog"></i> <span>Configuración</span>
+        </a>
+      
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> <span>Cerrar sesión</span>
+        </a>
+      </nav>      
     </aside>
 
     <main class="main-content">
@@ -46,22 +62,60 @@
         </div>
       </header>
 
+      {% if vista == 'prestamos' %}
+        <section class="loan-list">
+          {% for sala, hora, fecha, obs in datos %}
+            <div class="loan-item">
+              <div class="icon"><i class="fas fa-door-open"></i></div>
+              <div class="info">
+                <strong>Sala {{ sala }}</strong>
+                  <p>{{ fecha }} a las {{ hora }}<br>{{ obs }}</p>
+              </div>
+              <div class="status">Reservado</div>
+            </div>
+          {% endfor %}
+          {% if datos|length == 0 %}
+            <p>No hay préstamos registrados.</p>
+          {% endif %}
+        </section>
+      {% elif vista == 'usuarios' %}
+        <section>
+          <h2>Usuarios Registrados</h2>
+          <table style="width:100%; color:white;">
+            <thead>
+              <tr><th>Nombre</th><th>Correo</th><th>Rol</th></tr>
+            </thead>
+            <tbody>
+              {% for nombre, correo, rol in datos %}
+                <tr><td>{{ nombre }}</td><td>{{ correo }}</td><td>{{ rol }}</td></tr>
+              {% endfor %}
+              {% if datos|length == 0 %}
+                <tr><td colspan="3">No hay usuarios registrados.</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </section>
+      {% endif %}
+
       <div class="input-container">
         <input type="text" id="miInput" placeholder="Buscar por usuario, fecha o estado del préstamo">
         <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
       </div>
 
       <section class="loan-list">
-        {% for i in range(5) %}
+        {% for sala, hora, fecha, observaciones in prestamos %}
         <div class="loan-item">
-          <div class="icon"><i class="fas fa-user"></i></div>
+          <div class="icon"><i class="fas fa-door-open"></i></div>
           <div class="info">
-            <strong>Usuario {{ i + 1 }}</strong>
-            <p>Resumen del préstamo. Lorem ipsum dolor sit amet.</p>
+            <strong>Sala {{ sala }}</strong>
+            <p>{{ fecha }} a las {{ hora }}<br>{{ observaciones }}</p>
           </div>
-          <div class="status">100+</div>
+          <div class="status">Reservado</div>
         </div>
         {% endfor %}
+        {% if prestamos|length == 0 %}
+          <p style="color: white;">No hay préstamos registrados.</p>
+        {% endif %}
       </section>
     </main>
   </div>
