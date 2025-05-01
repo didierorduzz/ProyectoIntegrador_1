@@ -1,0 +1,28 @@
+# Ignorar bytecode de Python
+__pycache__/
+*.py[cod]
+
+# Entorno virtual (si usas venv)
+venv/
+env/
+
+# Configuración de entorno
+*.env
+.env
+
+# Archivos de sistema o editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos temporales
+*.bak
+*.swp
+*.tmp
+
+# Configuración de VS Code
+.vscode/
+
+# Archivos de bases de datos locales (si existieran)
+*.sqlite3
+*.db
