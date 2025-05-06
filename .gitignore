@@ -1,28 +1,45 @@
-# Ignorar bytecode de Python
+# Entorno virtual
+venv/
+.env
+*.env
+
+# Archivos compilados de Python
 __pycache__/
 *.py[cod]
+*$py.class
 
-# Entorno virtual (si usas venv)
-venv/
-env/
-
-# Configuración de entorno
-*.env
-.env
-
-# Archivos de sistema o editor
-.DS_Store
-Thumbs.db
-*.log
-
-# Archivos temporales
-*.bak
-*.swp
-*.tmp
-
-# Configuración de VS Code
-.vscode/
-
-# Archivos de bases de datos locales (si existieran)
+# Archivos de bases de datos temporales
 *.sqlite3
 *.db
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Archivos de logs y backups
+*.log
+*.bak
+*.tmp
+
+# Archivos del editor (VSCode, PyCharm, etc.)
+.vscode/
+.idea/
+*.code-workspace
+
+# Configuración de OracleDB (si exportas o usas scripts)
+*.sql
+*.dmp
+*.ora
+
+# Archivos de prueba o desarrollo
+*.test
+tests/
+*.coverage
+htmlcov/
+
+# Archivos de distribución
+build/
+dist/
+*.egg-info/
