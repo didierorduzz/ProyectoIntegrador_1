@@ -1,0 +1,27 @@
+CREATE SEQUENCE seq_usuarios START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_prestamos START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_reportes START WITH 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER trg_usuarios_bi
+BEFORE INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+  SELECT seq_usuarios.NEXTVAL INTO :NEW.id_usuario FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_prestamos_bi
+BEFORE INSERT ON prestamos
+FOR EACH ROW
+BEGIN
+  SELECT seq_prestamos.NEXTVAL INTO :NEW.id_prestamo FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_reportes_bi
+BEFORE INSERT ON reportes
+FOR EACH ROW
+BEGIN
+  SELECT seq_reportes.NEXTVAL INTO :NEW.id_reporte FROM dual;
+END;
+/

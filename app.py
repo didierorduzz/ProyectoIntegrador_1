@@ -67,6 +67,16 @@ def login():
         traceback.print_exc()
         flash('Error en el inicio de sesión.', 'error')
         return redirect(url_for('inicio'))
+    
+@app.route('/recuperar-contrasena', methods=['GET', 'POST'])
+def recuperar_contrasena():
+    if request.method == 'POST':
+        correo = request.form.get('correo')
+        # Aquí podrías buscar en la base de datos y enviar un correo, por ahora simulamos:
+        flash(f'Si el correo {correo} está registrado, recibirás instrucciones pronto.', 'success')
+        return redirect(url_for('inicio'))
+
+    return render_template('recuperar_contrasena.html')
 
 @app.route('/dashboard')
 def dashboard():
@@ -90,6 +100,13 @@ def dashboard():
                 datos = cursor.fetchall()
             elif vista == 'usuarios':
                 cursor.execute("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre")
+                datos = cursor.fetchall()
+            elif vista == 'reportes':
+                cursor.execute("""
+                    SELECT usuario, sala, TO_CHAR(fecha_reporte, 'YYYY-MM-DD'), descripcion
+                    FROM reportes
+                    ORDER BY fecha_reporte DESC
+                """)
                 datos = cursor.fetchall()
     except Exception as e:
         print("Error en dashboard:", e)

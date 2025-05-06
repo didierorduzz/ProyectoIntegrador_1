@@ -136,7 +136,6 @@ body {
 /* Search */
 .input-container {
   position: relative;
-  display: inline-block;
   margin-bottom: 2rem;
 }
 

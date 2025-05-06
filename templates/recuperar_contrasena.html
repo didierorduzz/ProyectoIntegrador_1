@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recuperar Contraseña</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <a href="https://web.udi.edu.co/">
+      <img src="{{ url_for('static', filename='imagenes/udi-logo.png') }}" alt="Logo UDI" class="logo-img" />
+    </a>
+  </header>
+
+  <div class="main-content">
+    <h1>Recuperar Contraseña</h1>
+    <h4 class="main-text">Ingresa tu correo para recibir instrucciones</h4>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="form-container">
+      <form method="post" action="{{ url_for('recuperar_contrasena') }}">
+        <label for="correo">Correo registrado</label>
+        <input type="email" name="correo" id="correo" placeholder="correo@ejemplo.com" required>
+        <button type="submit">Enviar instrucciones</button>
+        <a href="{{ url_for('inicio') }}">Volver al inicio de sesión</a>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

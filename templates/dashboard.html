@@ -26,9 +26,9 @@
           <i class="fas fa-users"></i> <span>Usuarios</span>
         </a>        
       
-        <a href="#" class="menu-link">
+        <a href="{{ url_for('dashboard', vista='reportes') }}" class="menu-link {% if vista == 'reportes' %}active{% endif %}">
           <i class="fas fa-chart-bar"></i> <span>Reportes</span>
-        </a>
+        </a>        
       
         <a href="#" class="menu-link">
           <i class="fas fa-cog"></i> <span>Configuración</span>
@@ -63,60 +63,105 @@
       </header>
 
       {% if vista == 'prestamos' %}
-        <section class="loan-list">
-          {% for sala, hora, fecha, obs in datos %}
-            <div class="loan-item">
-              <div class="icon"><i class="fas fa-door-open"></i></div>
-              <div class="info">
-                <strong>Sala {{ sala }}</strong>
-                  <p>{{ fecha }} a las {{ hora }}<br>{{ obs }}</p>
-              </div>
-              <div class="status">Reservado</div>
-            </div>
-          {% endfor %}
-          {% if datos|length == 0 %}
-            <p>No hay préstamos registrados.</p>
-          {% endif %}
-        </section>
-      {% elif vista == 'usuarios' %}
-        <section>
-          <h2>Usuarios Registrados</h2>
-          <table style="width:100%; color:white;">
-            <thead>
-              <tr><th>Nombre</th><th>Correo</th><th>Rol</th></tr>
-            </thead>
-            <tbody>
-              {% for nombre, correo, rol in datos %}
-                <tr><td>{{ nombre }}</td><td>{{ correo }}</td><td>{{ rol }}</td></tr>
-              {% endfor %}
-              {% if datos|length == 0 %}
-                <tr><td colspan="3">No hay usuarios registrados.</td></tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </section>
-      {% endif %}
-
+      <h2 style="color: #0fffc1; margin-bottom: 1rem;">Prestamos de Salas</h2>
       <div class="input-container">
         <input type="text" id="miInput" placeholder="Buscar por usuario, fecha o estado del préstamo">
         <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
       </div>
-
-      <section class="loan-list">
-        {% for sala, hora, fecha, observaciones in prestamos %}
-        <div class="loan-item">
-          <div class="icon"><i class="fas fa-door-open"></i></div>
-          <div class="info">
-            <strong>Sala {{ sala }}</strong>
-            <p>{{ fecha }} a las {{ hora }}<br>{{ observaciones }}</p>
-          </div>
-          <div class="status">Reservado</div>
+    
+      {% if datos %}
+        <section class="loan-list">
+          {% for sala, hora, fecha, observaciones in datos %}
+            <div class="loan-item">
+              <div class="icon"><i class="fas fa-user"></i></div>
+              <div class="info">
+                <strong>{{ sala }} - {{ fecha }}</strong>
+                <p>{{ observaciones or "Sin observaciones" }}</p>
+              </div>
+              <div class="status">{{ hora }}</div>
+            </div>
+          {% endfor %}
+        </section>
+      {% else %}
+        <p style="color: white;">No hay préstamos registrados.</p>
+      {% endif %}
+    
+    {% elif vista == 'usuarios' %}
+    <section>
+      <h2 style="color: #0fffc1; margin-bottom: 1rem;">Lista de Usuarios</h2>
+      <div style="overflow-x: auto;">
+        <div class="input-container">
+          <input type="text" id="miInput" placeholder="Buscar por nombre, correo o rol">
+          <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
         </div>
-        {% endfor %}
-        {% if prestamos|length == 0 %}
-          <p style="color: white;">No hay préstamos registrados.</p>
-        {% endif %}
-      </section>
+        <table style="width: 100%; border-collapse: collapse; background-color: #1f2937; color: #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 0 10px rgba(0,255,150,0.1);">
+          <thead>
+            <tr style="background-color: #0fffc1; color: #111827;">
+              <th style="padding: 12px 16px; text-align: left;">Nombre</th>
+              <th style="padding: 12px 16px; text-align: left;">Correo</th>
+              <th style="padding: 12px 16px; text-align: left;">Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if datos %}
+              {% for nombre, correo, rol in datos %}
+                <tr style="border-top: 1px solid #374151;">
+                  <td style="padding: 12px 16px;">{{ nombre }}</td>
+                  <td style="padding: 12px 16px;">{{ correo }}</td>
+                  <td style="padding: 12px 16px;">{{ rol }}</td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="3" style="padding: 20px; text-align: center; color: #ccc;">
+                  No hay usuarios registrados.
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>    
+    
+    {% elif vista == 'reportes' %}
+    <section>
+      <h2 style="color: #0fffc1; margin-bottom: 1rem;">Reportes de Salas</h2>
+      <div style="overflow-x: auto;">
+        <div class="input-container">
+          <input type="text" id="miInput" placeholder="Buscar por usuario, sala, fecha o descripcion del prestamo">
+          <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; background-color: #1f2937; color: #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 0 10px rgba(0,255,150,0.1);">
+          <thead>
+            <tr style="background-color: #0fffc1; color: #111827;">
+              <th style="padding: 12px 16px;">Usuario</th>
+              <th style="padding: 12px 16px;">Sala</th>
+              <th style="padding: 12px 16px;">Fecha</th>
+              <th style="padding: 12px 16px;">Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if datos %}
+              {% for usuario, sala, fecha, descripcion in datos %}
+                <tr style="border-top: 1px solid #374151;">
+                  <td style="padding: 12px 16px;">{{ usuario }}</td>
+                  <td style="padding: 12px 16px;">{{ sala }}</td>
+                  <td style="padding: 12px 16px;">{{ fecha }}</td>
+                  <td style="padding: 12px 16px;">{{ descripcion }}</td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="4" style="padding: 20px; text-align: center; color: #ccc;">
+                  No hay reportes registrados.
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>  
+    {% endif %}
     </main>
   </div>
 
@@ -137,5 +182,22 @@
       sidebar.classList.toggle('closed');
     }
   </script>
+  <script>
+    // Filtro dinámico en tablas
+    document.addEventListener('DOMContentLoaded', function () {
+      const input = document.getElementById('buscarTabla');
+      if (input) {
+        input.addEventListener('keyup', function () {
+          const filter = input.value.toLowerCase();
+          const rows = document.querySelectorAll("tbody tr");
+  
+          rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? "" : "none";
+          });
+        });
+      }
+    });
+  </script>  
 </body>
 </html>
