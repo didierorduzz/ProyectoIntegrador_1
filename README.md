@@ -49,7 +49,7 @@ Asegúrate de que las tablas necesarias estén creadas en OracleDB antes de ejec
 ### 🔹 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/usuario/proyecto-prestamos.git
+git clone https://github.com/usuario/ProyectoIntegrador_1.git
 cd Prueba proyecto 1
 
 # Crear archivo y entorno virtual
