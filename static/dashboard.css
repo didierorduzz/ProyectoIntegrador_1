@@ -12,7 +12,8 @@ body {
 
 .sidebar {
   width: 230px;
-  height: 150vh;
+  height: auto;
+  min-height: 100vh;
   background-color: #111827;
   padding: 2rem 1rem;
   transition: width 0.3s ease, padding 0.3s ease;

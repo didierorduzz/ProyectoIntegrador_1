@@ -15,6 +15,12 @@ CREATE TABLE prestamos (
   observaciones VARCHAR2(500)
 );
 
+CREATE TABLE profesores_autorizados (
+    id NUMBER PRIMARY KEY,
+    nombre VARCHAR2(100) NOT NULL,
+    correo VARCHAR2(100) NOT NULL UNIQUE
+);
+
 CREATE TABLE reportes (
   id_reporte NUMBER PRIMARY KEY,
   usuario VARCHAR2(100),

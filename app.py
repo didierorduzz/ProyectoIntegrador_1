@@ -108,11 +108,32 @@ def dashboard():
                     ORDER BY fecha_reporte DESC
                 """)
                 datos = cursor.fetchall()
+            elif vista == 'crear_profesor':
+                datos = []  # Puedes cargar algo si deseas mostrar profesores creados
     except Exception as e:
         print("Error en dashboard:", e)
         flash("No se pudieron cargar los datos.", "error")
 
     return render_template('dashboard.html', vista=vista, datos=datos)
+
+@app.route('/agregar-profesor', methods=['POST'])
+def agregar_profesor():
+    correo = request.form.get('correo')
+    if not correo:
+        flash("Debes ingresar un correo.", "error")
+        return redirect(url_for('dashboard', vista='usuarios'))
+
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO profesores_autorizados (correo) VALUES (:1)", (correo,))
+            conn.commit()
+            flash("Correo de profesor registrado exitosamente.", "success")
+    except Exception as e:
+        print("Error al agregar profesor:", e)
+        flash("Hubo un error al registrar el profesor.", "error")
+
+    return redirect(url_for('dashboard', vista='usuarios'))
 
 @app.route('/prestamo')
 def solicitar_prestamo():

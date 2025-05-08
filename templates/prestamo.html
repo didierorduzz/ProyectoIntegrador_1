@@ -56,7 +56,9 @@
         <p class="form-subtitle">Completa la información para solicitar un préstamo de sala</p>
 
         <form action="{{ url_for('solicitar') }}" method="post" class="prestamo-form">
-          <label for="edificio"><i class="fas fa-door-open"></i> Edificio disponible</label>
+          <label for="edificio">
+            <i class="fas fa-building" style="color: #0fffc1; margin-right: 6px;"></i> Edificio
+          </label>          
           <select name="edificio" id="edificio" required>
             <option value="">Seleccione un edificio</option>
             <option value="Edificio 1">DB (Daniel Bernoulli)</option>

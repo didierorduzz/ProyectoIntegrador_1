@@ -24,7 +24,7 @@
         
         <a href="{{ url_for('dashboard', vista='usuarios') }}" class="menu-link {% if vista == 'usuarios' %}active{% endif %}">
           <i class="fas fa-users"></i> <span>Usuarios</span>
-        </a>        
+        </a>
       
         <a href="{{ url_for('dashboard', vista='reportes') }}" class="menu-link {% if vista == 'reportes' %}active{% endif %}">
           <i class="fas fa-chart-bar"></i> <span>Reportes</span>
@@ -69,26 +69,42 @@
         <span class="clear-btn" onclick="document.getElementById('miInput').value = '';">×</span>
       </div>
     
-      {% if datos %}
-        <section class="loan-list">
-          {% for sala, hora, fecha, observaciones in datos %}
-            <div class="loan-item">
-              <div class="icon"><i class="fas fa-user"></i></div>
-              <div class="info">
-                <strong>{{ sala }} - {{ fecha }}</strong>
-                <p>{{ observaciones or "Sin observaciones" }}</p>
+      <section class="loan-list">
+        {% if datos %}
+          {% for sala, hora, fecha, observaciones, edificio in datos %}
+            {% set color =
+              '#3B82F6' if edificio == 'Edificio 1' else
+              '#10B981' if edificio == 'Edificio 2' else
+              '#F59E0B' if edificio == 'Edificio 3' else
+              '#9CA3AF' %}
+              <div class="loan-item" style="border-left: 5px solid {{ color }};">
+              <div class="icon">
+                <i class="fas fa-building" style="color: {{ color }};"></i>
               </div>
-              <div class="status">{{ hora }}</div>
+              <div class="info">
+                <strong>{{ edificio }} - Sala {{ sala }}</strong>
+                <p>
+                  Fecha: {{ fecha }}<br>
+                  Hora: {{ hora }}<br>
+                  {{ observaciones or "Sin observaciones" }}
+                </p>
+              </div>
+              <div class="status">Reservado</div>
             </div>
           {% endfor %}
-        </section>
-      {% else %}
-        <p style="color: white;">No hay préstamos registrados.</p>
-      {% endif %}
+        {% else %}
+          <p style="color: white;">No hay préstamos registrados.</p>
+        {% endif %}
+      </section>
     
     {% elif vista == 'usuarios' %}
     <section>
-      <h2 style="color: #0fffc1; margin-bottom: 1rem;">Lista de Usuarios</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="color: #0fffc1; margin-bottom: 1rem;">Lista de Usuarios</h2>
+        <button onclick="mostrarModal()" style="background-color: #0fffc1; border: none; padding: 10px 20px; color: #111827; border-radius: 8px; font-weight: bold; cursor: pointer;">
+          + Agregar usuario
+        </button>
+      </div>      
       <div style="overflow-x: auto;">
         <div class="input-container">
           <input type="text" id="miInput" placeholder="Buscar por nombre, correo o rol">
@@ -104,13 +120,18 @@
           </thead>
           <tbody>
             {% if datos %}
-              {% for nombre, correo, rol in datos %}
-                <tr style="border-top: 1px solid #374151;">
-                  <td style="padding: 12px 16px;">{{ nombre }}</td>
-                  <td style="padding: 12px 16px;">{{ correo }}</td>
-                  <td style="padding: 12px 16px;">{{ rol }}</td>
-                </tr>
-              {% endfor %}
+            {% for nombre, correo, rol in datos %}
+            <tr style="border-top: 1px solid #374151; {% if correo == session['usuario'] %}background-color: #0fffc110;{% endif %}">
+              <td style="padding: 12px 16px;">
+                {{ nombre }}
+                {% if correo == session['usuario'] %}
+                  <span style="color: #0fffc1; font-weight: bold;"> (Tú)</span>
+                {% endif %}
+              </td>
+              <td style="padding: 12px 16px;">{{ correo }}</td>
+              <td style="padding: 12px 16px;">{{ rol }}</td>
+            </tr>
+          {% endfor %}                   
             {% else %}
               <tr>
                 <td colspan="3" style="padding: 20px; text-align: center; color: #ccc;">
@@ -121,6 +142,45 @@
           </tbody>
         </table>
       </div>
+      <div id="modalProfesor" style="
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background-color: rgba(0, 0, 0, 0.75);  /* Fondo más oscuro */
+        backdrop-filter: blur(2px);            /* Difuminado opcional */
+        z-index: 9998;
+      " onclick="cerrarModal(event)">
+        
+        <!-- Contenido del cuadro -->
+        <div id="contenidoModal" style="
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #1f2937;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 0 25px rgba(0, 255, 150, 0.4);
+          z-index: 9999;
+          width: 100%;
+          max-width: 400px;
+        ">
+          <h3 style="color: #0fffc1; margin-bottom: 1rem;">Agregar nuevo profesor</h3>
+          <form action="{{ url_for('agregar_profesor') }}" method="post">
+            <input type="text" name="nombre" placeholder="Nombre del profesor"
+            style="padding: 10px; width: 95%; margin-bottom: 1rem; border-radius: 8px; border: none;" required>
+            <input type="email" name="correo" placeholder="Correo institucional del profesor"
+                    style="padding: 10px; width: 95%; margin-bottom: 1rem; border-radius: 8px; border: none;" required>
+            <div style="display: flex; justify-content: space-between;">
+              <button type="submit" style="background-color: #0fffc1; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; color: #111827;">
+                Agregar
+              </button>
+              <button type="button" onclick="cerrarModal()" style="background-color: #ef4444; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; color: white;">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
     </section>
     
     {% elif vista == 'reportes' %}
@@ -199,5 +259,16 @@
       }
     });
   </script>  
+  
+  <script>
+    function mostrarModal() {
+      document.getElementById("modalProfesor").style.display = "block";
+    }
+
+    function cerrarModal(event = null) {
+    if (event && event.target.id !== "modalProfesor") return;
+    document.getElementById("modalProfesor").style.display = "none";
+  }
+  </script>
 </body>
 </html>
