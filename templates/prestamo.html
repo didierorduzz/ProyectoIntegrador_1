@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Solicitud de Préstamo</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='prestamo.css') }}">
@@ -55,10 +56,19 @@
         <p class="form-subtitle">Completa la información para solicitar un préstamo de sala</p>
 
         <form action="{{ url_for('solicitar') }}" method="post" class="prestamo-form">
+          <label for="edificio"><i class="fas fa-door-open"></i> Edificio disponible</label>
+          <select name="edificio" id="edificio" required>
+            <option value="">Seleccione un edificio</option>
+            <option value="Edificio 1">DB (Daniel Bernoulli)</option>
+            <option value="Edificio 2">SJBL (Jorge Luis)</option>
+            <option value="Edificio 3">CLL (Carlos Lleras)</option>
+          </select>
+
+        <form action="{{ url_for('solicitar') }}" method="post" class="prestamo-form">
           <label for="sala"><i class="fas fa-door-open"></i> Sala disponible</label>
           <select name="sala" id="sala" required>
             <option value="">Seleccione una sala</option>
-            <option value="1">Sala A</option>
+            <option value="1">Sala de informatica 1</option>
             <option value="2">Sala B</option>
           </select>
 

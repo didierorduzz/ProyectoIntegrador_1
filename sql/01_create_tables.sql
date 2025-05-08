@@ -8,6 +8,7 @@ CREATE TABLE usuarios (
 
 CREATE TABLE prestamos (
   id_prestamo NUMBER PRIMARY KEY,
+  edificio VARCHAR2(100)
   sala VARCHAR2(50),
   hora_reserva VARCHAR2(10),
   fecha_reserva DATE,

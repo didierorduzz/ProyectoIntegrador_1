@@ -92,8 +92,8 @@ def dashboard():
             cursor = conn.cursor()
             if vista == 'prestamos':
                 cursor.execute("""
-                    SELECT sala, TO_CHAR(hora_reserva, 'HH24:MI'), 
-                           TO_CHAR(fecha_reserva, 'YYYY-MM-DD'), observaciones
+                    SELECT sala, hora_reserva, 
+                        TO_CHAR(fecha_reserva, 'YYYY-MM-DD'), observaciones, edificio
                     FROM prestamos
                     ORDER BY fecha_reserva DESC, hora_reserva DESC
                 """)
@@ -124,6 +124,7 @@ def solicitar_prestamo():
 @app.route('/solicitar', methods=['POST'])
 def solicitar():
     sala = request.form.get('sala')
+    edificio = request.form.get('edificio')
     hora = request.form.get('hora')
     fecha = request.form.get('fecha')
     observaciones = request.form.get('observaciones')
@@ -152,16 +153,16 @@ def solicitar():
             usuario_id = cursor.fetchone()[0]
 
             cursor.execute("""
-            INSERT INTO prestamos (sala, hora_reserva, fecha_reserva, observaciones, id_usuario)
-            VALUES (:1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5)
-            """, (sala, hora, fecha, observaciones, usuario_id))
+            INSERT INTO prestamos (sala, hora_reserva, fecha_reserva, observaciones, id_usuario, edificio)
+            VALUES (:1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5, :6)
+            """, (sala, hora, fecha, observaciones, usuario_id, edificio))
             conn.commit()
             flash("Solicitud registrada exitosamente.", "success")
     except Exception as e:
         print("Error al guardar en Oracle:", e)
         flash("Hubo un error al registrar la solicitud.", "error")
 
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('solicitar_prestamo'))
 
 @app.route('/usuarios')
 def ver_usuarios():
