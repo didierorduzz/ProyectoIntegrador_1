@@ -1,4 +1,4 @@
-CREATE TABLE usuarios (
+CREATE TABLE usuario (
   id_usuario NUMBER PRIMARY KEY,
   nombre VARCHAR2(100),
   correo VARCHAR2(100) UNIQUE,
@@ -6,7 +6,7 @@ CREATE TABLE usuarios (
   rol VARCHAR2(20)
 );
 
-CREATE TABLE prestamos (
+CREATE TABLE prestamosala (
   id_prestamo NUMBER PRIMARY KEY,
   edificio VARCHAR2(100)
   sala VARCHAR2(50),

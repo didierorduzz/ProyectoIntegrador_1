@@ -59,19 +59,19 @@
           <label for="edificio">
             <i class="fas fa-building" style="color: #0fffc1; margin-right: 6px;"></i> Edificio
           </label>          
-          <select name="edificio" id="edificio" required>
+          <select id="edificio" name="edificio" required onchange="actualizarSalas()">
             <option value="">Seleccione un edificio</option>
-            <option value="Edificio 1">DB (Daniel Bernoulli)</option>
-            <option value="Edificio 2">SJBL (Jorge Luis)</option>
-            <option value="Edificio 3">CLL (Carlos Lleras)</option>
+            <option value="ES">ES (Ernesto Sabato)</option>
+            <option value="JLB">JLB (Jorge Luis Borgues)</option>
+            <option value="CLLR">CLLR (Carlos Lleras)</option>
           </select>
 
         <form action="{{ url_for('solicitar') }}" method="post" class="prestamo-form">
           <label for="sala"><i class="fas fa-door-open"></i> Sala disponible</label>
           <select name="sala" id="sala" required>
             <option value="">Seleccione una sala</option>
-            <option value="1">Sala de informatica 1</option>
-            <option value="2">Sala B</option>
+            <option value="1">JLB101</option>
+            <option value="2">JLB102</option>
           </select>
 
           <label for="hora"><i class="fas fa-clock"></i> Hora de reserva</label>
@@ -105,6 +105,30 @@
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('closed');
     }
+  </script>
+  <script>
+  function actualizarSalas() {
+    const edificio = document.getElementById('edificio').value;
+    const salaSelect = document.getElementById('sala');
+    salaSelect.innerHTML = '<option value="">Seleccione una sala</option>'; // Reiniciar opciones
+
+    let salas = [];
+
+    if (edificio === 'JLB') {
+      salas = ['JLB101', 'JLB102', 'JLB103'];
+    } else if (edificio === 'ES') {
+      salas = ['ES901', 'ES902'];
+    } else if (edificio === 'CLLR') {
+      salas = ['CLLR102', 'CLLR102', 'CLLR201', 'CLLR202'];
+    }
+
+    salas.forEach(sala => {
+      const option = document.createElement('option');
+      option.value = sala;
+      option.textContent = sala;
+      salaSelect.appendChild(option);
+    });
+  }
   </script>
 </body>
 </html>

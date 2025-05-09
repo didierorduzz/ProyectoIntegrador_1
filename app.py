@@ -26,7 +26,7 @@ def registro():
             with get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute("""
-                    INSERT INTO usuarios (nombre, correo, contrasena, rol)
+                    INSERT INTO usuario (nombre, correo, contraseña, rol)
                     VALUES (:1, :2, :3, :4)
                 """, (nombre, correo, contrasena, rol))
                 conn.commit()
@@ -48,7 +48,7 @@ def login():
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT rol FROM usuarios WHERE correo = :1 AND contrasena = :2", (usuario, contrasena))
+            cursor.execute("SELECT rol FROM usuario WHERE correo = :1 AND contraseña = :2", (usuario, contrasena))
             result = cursor.fetchone()
 
             if result:
@@ -92,14 +92,14 @@ def dashboard():
             cursor = conn.cursor()
             if vista == 'prestamos':
                 cursor.execute("""
-                    SELECT sala, hora_reserva, 
-                        TO_CHAR(fecha_reserva, 'YYYY-MM-DD'), observaciones, edificio
-                    FROM prestamos
-                    ORDER BY fecha_reserva DESC, hora_reserva DESC
+                    SELECT sala_solicitada, hora_prestamo, 
+                        TO_CHAR(fecha_solicitud, 'YYYY-MM-DD'), observaciones, edificio
+                    FROM prestamosala
+                    ORDER BY fecha_solicitud DESC, hora_prestamo DESC
                 """)
                 datos = cursor.fetchall()
             elif vista == 'usuarios':
-                cursor.execute("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre")
+                cursor.execute("SELECT nombre, correo, rol FROM usuario ORDER BY nombre")
                 datos = cursor.fetchall()
             elif vista == 'reportes':
                 cursor.execute("""
@@ -160,8 +160,8 @@ def solicitar():
 
             # Verifica si ya existe una reserva para esa fecha, hora y sala
             cursor.execute("""
-                SELECT COUNT(*) FROM prestamos
-                WHERE sala = :1 AND hora_reserva = :2 AND fecha_reserva = TO_DATE(:3, 'YYYY-MM-DD')
+                SELECT COUNT(*) FROM prestamosala
+                WHERE sala_solicitada = :1 AND hora_prestamo = :2 AND fecha_solicitud = TO_DATE(:3, 'YYYY-MM-DD')
             """, (sala, hora, fecha))
             count = cursor.fetchone()[0]
 
@@ -170,12 +170,12 @@ def solicitar():
                 return redirect(url_for('solicitar_prestamo'))
 
             # Inserta nueva solicitud
-            cursor.execute("SELECT id_usuario FROM usuarios WHERE correo = :1", (session['usuario'],))
+            cursor.execute("SELECT correo FROM usuario WHERE correo = :1", (session['usuario'],))
             usuario_id = cursor.fetchone()[0]
 
             cursor.execute("""
-            INSERT INTO prestamos (sala, hora_reserva, fecha_reserva, observaciones, id_usuario, edificio)
-            VALUES (:1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5, :6)
+            INSERT INTO prestamosala (sala_solicitada, hora_prestamo, fecha_solicitud, observaciones, edificio)
+            VALUES (:1, :2, TO_DATE(:3, 'YYYY-MM-DD'), :4, :5)
             """, (sala, hora, fecha, observaciones, usuario_id, edificio))
             conn.commit()
             flash("Solicitud registrada exitosamente.", "success")
@@ -194,7 +194,7 @@ def ver_usuarios():
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT nombre, correo, rol FROM usuarios ORDER BY nombre")
+            cursor.execute("SELECT nombre, correo, rol FROM usuario ORDER BY nombre")
             usuarios = cursor.fetchall()
     except Exception as e:
         print("Error al cargar usuarios:", e)

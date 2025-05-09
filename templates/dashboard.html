@@ -73,9 +73,9 @@
         {% if datos %}
           {% for sala, hora, fecha, observaciones, edificio in datos %}
             {% set color =
-              '#3B82F6' if edificio == 'Edificio 1' else
-              '#10B981' if edificio == 'Edificio 2' else
-              '#F59E0B' if edificio == 'Edificio 3' else
+              '#3B82F6' if edificio == 'ES' else
+              '#10B981' if edificio == 'JLB' else
+              '#F59E0B' if edificio == 'CLLR' else
               '#9CA3AF' %}
               <div class="loan-item" style="border-left: 5px solid {{ color }};">
               <div class="icon">

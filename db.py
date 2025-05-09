@@ -5,7 +5,7 @@ oracledb.init_oracle_client(lib_dir=r"C:\oracle\instantclient_19_26")  # Ajusta 
 
 def get_connection():
     return oracledb.connect(
-        user="system",
-        password="didierpro4",  # Reemplaza con tu contraseña real si la cambiaste
+        user="proyecto01",
+        password="proyecto01",  # Reemplaza con tu contraseña real si la cambiaste
         dsn="localhost/XE"
     )
