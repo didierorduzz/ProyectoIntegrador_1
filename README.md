@@ -58,7 +58,7 @@ Asegúrate de que las tablas necesarias estén creadas en OracleDB antes de ejec
 
 ```bash
 git clone https://github.com/usuario/ProyectoIntegrador_1.git
-cd ProyectoIntegrador_1
+cd Prueba proyecto 1  # Nombre anterior del proyecto
 ```
 
 ### 🔹 Crear archivo y entorno virtual
