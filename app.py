@@ -2,26 +2,32 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from datetime import datetime
 from db import get_connection
 
+# Configuración básica de la aplicación Flask
 app = Flask(__name__)
-app.secret_key = 'clave_secreta'
+app.secret_key = 'clave_secreta' # Clave para manejar las sesiones de usuario
 
+# Ruta principal - Página de inicio (Login)
 @app.route('/')
 def inicio():
     return render_template('index.html')
 
+# Ruta para registrar nuevos usuarios
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
+        # Recoge datos del formulario
         nombre = request.form.get('nombre')
         correo = request.form.get('correo')
         contrasena = request.form.get('contrasena')
         confirmar = request.form.get('confirmar')
         rol = request.form.get('rol')
 
+        # Validación de coincidencia de contraseñas
         if contrasena != confirmar:
             flash('Las contraseñas no coinciden.', 'error')
             return redirect(url_for('registro'))
 
+        # Registro en la base de datos
         try:
             with get_connection() as conn:
                 cursor = conn.cursor()
@@ -40,6 +46,7 @@ def registro():
         return render_template('register.html')
 
 
+# Ruta para iniciar sesion
 @app.route('/login', methods=['POST'])
 def login():
     usuario = request.form['usuario']
@@ -55,6 +62,7 @@ def login():
                 session['usuario'] = usuario
                 rol = result[0]
                 flash('Inicio de sesión exitoso.', 'success')
+                # Redirección basada en el rol
                 if rol == 'administrador':
                     return redirect(url_for('dashboard'))
                 else:
@@ -67,26 +75,30 @@ def login():
         traceback.print_exc()
         flash('Error en el inicio de sesión.', 'error')
         return redirect(url_for('inicio'))
-    
+
+# Ruta para recuperar contraseña (simulada)
 @app.route('/recuperar-contrasena', methods=['GET', 'POST'])
 def recuperar_contrasena():
     if request.method == 'POST':
         correo = request.form.get('correo')
-        # Aquí podrías buscar en la base de datos y enviar un correo, por ahora simulamos:
+        # Aquí se podrá buscar en la base de datos y enviar un correo, por ahora simulamos:
         flash(f'Si el correo {correo} está registrado, recibirás instrucciones pronto.', 'success')
         return redirect(url_for('inicio'))
 
     return render_template('recuperar_contrasena.html')
 
+# Ruta principal del administrador
 @app.route('/dashboard')
 def dashboard():
     if 'usuario' not in session:
         flash('Debes iniciar sesión primero.', 'error')
         return redirect(url_for('inicio'))
 
+    # Define qué vista se está mostrando (prestamos, usuarios, reportes o para agregar usuarios)
     vista = request.args.get('vista', 'prestamos')
-
     datos = []
+    
+    # Cargar los datos necesarios según la vista seleccionada
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
@@ -116,6 +128,7 @@ def dashboard():
 
     return render_template('dashboard.html', vista=vista, datos=datos)
 
+# Ruta para registrar nuevos correos de profesores desde el panel de administración
 @app.route('/agregar-profesor', methods=['POST'])
 def agregar_profesor():
     correo = request.form.get('correo')
@@ -135,6 +148,7 @@ def agregar_profesor():
 
     return redirect(url_for('dashboard', vista='usuarios'))
 
+# Ruta para mostrar el formulario de solicitud de préstamo
 @app.route('/prestamo')
 def solicitar_prestamo():
     if 'usuario' not in session:
@@ -142,6 +156,7 @@ def solicitar_prestamo():
         return redirect(url_for('inicio'))
     return render_template('prestamo.html')
 
+# Ruta para procesar la solicitud de préstamo
 @app.route('/solicitar', methods=['POST'])
 def solicitar():
     sala = request.form.get('sala')
@@ -150,6 +165,7 @@ def solicitar():
     fecha = request.form.get('fecha')
     observaciones = request.form.get('observaciones')
 
+    # Validar campos obligatorios
     if not sala or not hora or not fecha:
         flash("Todos los campos son obligatorios.", "error")
         return redirect(url_for('solicitar_prestamo'))
@@ -185,6 +201,7 @@ def solicitar():
 
     return redirect(url_for('solicitar_prestamo'))
 
+# Ruta para listar usuarios
 @app.route('/usuarios')
 def ver_usuarios():
     if 'usuario' not in session:
@@ -203,11 +220,13 @@ def ver_usuarios():
 
     return render_template('usuarios.html', usuarios=usuarios)
 
+# Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
     session.pop('usuario', None)
     flash('Has cerrado sesión exitosamente.', 'success')
     return redirect(url_for('inicio'))
 
+# Ejecución de la aplicación
 if __name__ == '__main__':
     app.run(debug=True)
