@@ -26,7 +26,7 @@
         <a href="#" class="menu-link">
           <i class="fas fa-cog"></i> <span>Configuración</span>
         </a>
-        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Salir</span></a>
+        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Cerrar sesion</span></a>
       </nav>
     </aside>
 
@@ -44,7 +44,7 @@
 
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-          <div class="flash-messages">
+          <div class="flash-messages floating-message-container">
             {% for category, message in messages %}
               <div class="alert {{ category }}">{{ message }}</div>
             {% endfor %}
@@ -92,7 +92,7 @@
   <script>
 
         // Ocultar alertas después de 4 segundos
-        setTimeout(() => {
+    setTimeout(() => {
       const alerts = document.querySelectorAll('.alert');
       alerts.forEach(alert => {
         alert.style.transition = 'opacity 0.5s ease';
