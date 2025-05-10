@@ -113,6 +113,7 @@ def dashboard():
             elif vista == 'usuarios':
                 cursor.execute("SELECT nombre, correo, rol FROM usuario ORDER BY nombre")
                 datos = cursor.fetchall()
+            # Aun no implementado en la base de datos
             elif vista == 'reportes':
                 cursor.execute("""
                     SELECT usuario, sala, TO_CHAR(fecha_reporte, 'YYYY-MM-DD'), descripcion
@@ -128,7 +129,7 @@ def dashboard():
 
     return render_template('dashboard.html', vista=vista, datos=datos)
 
-# Ruta para registrar nuevos correos de profesores desde el panel de administración
+# Ruta para registrar nuevos correos de profesores desde el panel de administración (aun no implementado en la base de datos)
 @app.route('/agregar-profesor', methods=['POST'])
 def agregar_profesor():
     correo = request.form.get('correo')
